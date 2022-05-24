@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Atualizar Postagem{% endblock %}
+    
+{% block content %}
+{% if user.is_authenticated %}
+    {% if user.id == post.autor.id %}
+        <h1> Atualizar Postagem </h1>
+        <br/>
+
+        <div class="form-group">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <br/>
+                <button class="btn btn-secondary"> Atualizar </button>
+            </form>
+        </div>
+    {% endif %}
+{% endif %}
+{% endblock %}

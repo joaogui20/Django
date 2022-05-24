@@ -1,0 +1,34 @@
+{% extends 'base.html' %}{% load embed_video_tags %}
+
+{% block title %}{{ cats }}{% endblock %}
+
+{% block content %}
+{% if category_posts %}
+
+    <h1> {{cats}} </h1>
+
+    {% for post in category_posts %}
+        <a href="{% url 'post-detail' post.pk %}"><h1>{{ post.titulo }}</h1></a>
+    <p>Postado por {{ post.autor }} | {{ post.post_data }}</p>
+    <br/>
+
+    {% if post.youtube %}
+        <div class="container">
+            {% video post.youtube 'medium' %}
+        </div>
+        <br/>
+    {% endif %}
+
+    {% if post.imagem %}
+        <img src="{{ post.imagem.url }}" class="rounded mx-auto d-block" alt="">
+    {% endif %}
+
+    {{ post.corpo|safe|slice:":200" }}
+
+    {% if post.arquivo %}
+        <a href="{{ post.arquivo.url }}" download><button class="btn btn-secondary">Visualizar</button></a>
+    {% endif %}
+    <br/><br/>
+    {% endfor %}
+{% endif %}
+{% endblock %}

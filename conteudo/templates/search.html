@@ -1,0 +1,60 @@
+{% extends "base.html" %}{% load embed_video_tags %}
+{% block title %}Pesquisar{% endblock %}
+{% block content %}
+<div class="container pt-5">
+
+    {% if q %}
+    <h1>
+        {% with results.count as total_results %}
+        Encontrado {{ total_results }} resultado{{ total_results|pluralize }}
+        {% endwith %}
+    </h1>
+
+    <div>
+        {% for post in results %}
+            <a href="{% url 'post-detail' post.pk %}"><h1>{{ post.titulo }}</h1></a>
+            <p>Categoria: <a href="{% url 'categoria' post.categoria %}">{{ post.categoria }}</a>
+                <br/>Postado por {{ post.autor }} | {{ post.post_data }}</p>
+            
+            {% if post.youtube %}
+                <div class="container">
+                    {% video post.youtube 'small' %}
+                </div>
+                <br/>
+                <a href="{% url 'post-detail' post.pk %}"><button class="btn btn-primary">Ver mais</button></a>
+            {% endif %}
+    
+            {% if post.imagem %}
+                <img src="{{ post.imagem.url }}" alt="" height="400w">
+                <br/><br/>
+            {% endif %}
+    
+            <p>{{ post.corpo|safe|slice:":494" }}</p>
+    
+            {% if post.corpo %}
+                <a href="{% url 'post-detail' post.pk %}"><button class="btn btn-primary">Continue lendo</button></a>
+                <br/><br/>
+            {% endif %}
+    
+            {% if post.arquivo %}
+                <a href="{{ post.arquivo.url }}" download><button class="btn btn-secondary">Visualizar</button></a>
+                <br/><br/>
+            {% endif %}
+        {% empty %}
+            <p>Nenhum resultado foi encontrado para essa busca.</p>
+        {% endfor %}
+    </div>
+
+    <br/>
+    <p><a href="{% url 'post-search' %}" class="btn btn-success" role="button" aria-disabled="true">Nova Pesquisa</a>
+    </p>
+    {% else %}
+    <h1>Pesquisar conteudo</h1>
+    <form method="get">
+        {{ form.as_p }}
+        <input class="btn btn-primary my-1" type="submit" value="Pesquisar">
+    </form>
+    {% endif %}
+    
+</div>
+{% endblock %}

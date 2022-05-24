@@ -1,0 +1,47 @@
+{% extends 'base.html' %}{% load embed_video_tags %}
+
+{% block title %}Página Principal{% endblock %}
+
+{% block content %}
+<div>
+    {% for post in object_list %}
+        <h1>{{ post.titulo }}</h1></a>
+        <p>Categoria: <a href="{% url 'categoria' post.categoria %}">{{ post.categoria }}</a>
+            <br/>Postado por {{ post.autor }} | {{ post.post_data }}</p>
+
+        {% if post.youtube %}
+            <div class="container">
+                {% video post.youtube 'small' %}
+            </div>
+            <br/>
+        {% endif %}
+
+        {% if post.imagem %}
+            <div class="container">
+                <img src="{{ post.imagem.url }}" alt="" height="400w">
+            </div>
+            <br/>
+        {% endif %}
+
+        {% if post.corpo %}
+            <p>{{ post.corpo|safe|slice:":494" }}</p>
+        {% endif %}
+
+        {% if post.arquivo %}
+            <a href="{{ post.arquivo.url }}" download><button class="btn btn-secondary">Visualizar</button></a>
+        {% endif %}
+
+        <a href="{% url 'post-detail' post.pk %}"><button class="btn btn-primary">Continue lendo</button></a>
+
+            
+        <!-- {% if user.is_authenticated %}
+            {% if user.id == post.autor.id %}
+                <a href="{% url 'update_post' post.pk %}"><button class="btn btn-secondary">Editar</button></a>
+                <a href="{% url 'delete_post' post.pk %}"><button class="btn btn-danger"> Deletar </button></a>
+            {% endif %}
+        {% endif %} -->
+        <br/><br/>
+    {% endfor %}
+</div>
+
+{% endblock %}
